@@ -1,14 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Multiplier : MonoBehaviour
+public class BuyAutoClickers : MonoBehaviour
 {
+
     [SerializeField] double cost;
     [SerializeField] double costIncrease;
-    [SerializeField] int multipler;
+    [SerializeField] int amountOfAutoClickers;
+    [Space]
+    [SerializeField] GameObject autoClicker;
     [Space]
     [SerializeField] TextMeshProUGUI costText;
-    [SerializeField] TextMeshProUGUI multiplerText;
+    [SerializeField] TextMeshProUGUI amountOfAutoClickerText;
 
     double max = 1000000000;
     double min = 1000000;
@@ -23,14 +29,16 @@ public class Multiplier : MonoBehaviour
     void Awake()
     {
         clicker = FindObjectOfType<Clicker>();
-        endTexts = clicker.GetEndTexts();
 
         costText.text = cost.ToString();
-        multiplerText.text = multipler.ToString() + "X";
+        endTexts = clicker.GetEndTexts();
     }
 
     void Update()
     {
+        amountOfAutoClickers = FindObjectsOfType<AutoClicker>().Length;
+        amountOfAutoClickerText.text = amountOfAutoClickers.ToString();
+
         RoundCost();
     }
 
@@ -38,17 +46,13 @@ public class Multiplier : MonoBehaviour
     {
         if (cost < min && currentEndText > 1)
         {
-            cost = 1000;
+            cost *= 1000;
             currentEndText--;
-
-            Debug.Log("Minus");
         }
         else if (cost >= max)
         {
             cost /= 1000;
             currentEndText++;
-
-            Debug.Log("Plus");
         }
         else if (cost >= 1000 && !isOver1000)
         {
@@ -79,12 +83,20 @@ public class Multiplier : MonoBehaviour
     public void OnButtonClick()
     {
         double amount = clicker.GetAmount();
-        
-        if (amount >= cost)
+        int clickerEndText = clicker.GetCurrentEndText();
+
+        if ((clickerEndText > currentEndText) || (amount >= cost && clickerEndText == currentEndText))
         {
-            clicker.AddMultiplier(cost, multipler);
-            cost *= costIncrease;
-            costText.text = cost.ToString();
+            BuyAutoClicker();
         }
+    }
+
+    void BuyAutoClicker()
+    {
+        clicker.BuyAnything(cost);
+        cost *= costIncrease;
+        costText.text = cost.ToString();
+
+        Instantiate(autoClicker);
     }
 }

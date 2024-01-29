@@ -5,7 +5,6 @@ using UnityEngine;
 public class AutoClicker : MonoBehaviour
 {
     [SerializeField] float timeBeforeClick;
-    [SerializeField] float amountPerClick;
 
     Clicker clicker;
 

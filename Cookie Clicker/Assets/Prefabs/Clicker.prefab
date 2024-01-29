@@ -48,6 +48,8 @@ MonoBehaviour:
   amount: 0
   amountText: {fileID: 0}
   endTexts:
+  - 
+  - K
   - M
   - B
   - T

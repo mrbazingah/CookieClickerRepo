@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Farm : MonoBehaviour
 {
-    [SerializeField] float timer;
-    [SerializeField] float amountEarned;
+    [SerializeField] int timer;
+    [SerializeField] double amountEarned;
 
-    float amountEarnedAtStart;
+    double amountEarnedAtStart;
 
     Clicker clicker;
 
@@ -15,13 +15,16 @@ public class Farm : MonoBehaviour
     {
         clicker = FindObjectOfType<Clicker>();
 
+        timer /= timer;
+        amountEarned /= timer;
+
         amountEarnedAtStart = amountEarned;
         StartCoroutine(ClickDelay());
     }
 
     IEnumerator ClickDelay()
     {
-        float multipliers = clicker.GetAllMultipliers();
+        int multipliers = clicker.GetAllMultipliers();
 
         amountEarned = amountEarnedAtStart;
         amountEarned *= multipliers;
