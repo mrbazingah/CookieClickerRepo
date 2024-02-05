@@ -12,6 +12,8 @@ public class Multiplier : MonoBehaviour
 
     double max = 1000000000;
     double min = 1000000;
+    double minAtStart;
+
     string[] endTexts;
     int currentEndText;
     string costTextString;
@@ -27,6 +29,8 @@ public class Multiplier : MonoBehaviour
 
         costText.text = cost.ToString();
         multiplerText.text = multipler.ToString() + "X";
+
+        minAtStart = min;
     }
 
     void Update()
@@ -38,17 +42,23 @@ public class Multiplier : MonoBehaviour
     {
         if (cost < min && currentEndText > 1)
         {
-            cost = 1000;
-            currentEndText--;
+            if (cost < minAtStart)
+            {
+                currentEndText = 1;
+                return;
+            }
 
-            Debug.Log("Minus");
+            min /= 1000;
+            max /= 1000;
+
+            currentEndText--;
         }
         else if (cost >= max)
         {
-            cost /= 1000;
-            currentEndText++;
+            min *= 1000;
+            max *= 1000;
 
-            Debug.Log("Plus");
+            currentEndText++;
         }
         else if (cost >= 1000 && !isOver1000)
         {

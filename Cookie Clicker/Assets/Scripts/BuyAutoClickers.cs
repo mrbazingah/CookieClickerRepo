@@ -18,6 +18,8 @@ public class BuyAutoClickers : MonoBehaviour
 
     double max = 1000000000;
     double min = 1000000;
+    double minAtStart;
+
     string[] endTexts;
     int currentEndText;
     string costTextString;
@@ -32,6 +34,8 @@ public class BuyAutoClickers : MonoBehaviour
 
         costText.text = cost.ToString();
         endTexts = clicker.GetEndTexts();
+
+        minAtStart = min;
     }
 
     void Update()
@@ -46,12 +50,22 @@ public class BuyAutoClickers : MonoBehaviour
     {
         if (cost < min && currentEndText > 1)
         {
-            cost *= 1000;
+            if (cost < minAtStart)
+            {
+                currentEndText = 1;
+                return;
+            }
+
+            min /= 1000;
+            max /= 1000;
+
             currentEndText--;
         }
         else if (cost >= max)
         {
-            cost /= 1000;
+            min *= 1000;
+            max *= 1000;
+
             currentEndText++;
         }
         else if (cost >= 1000 && !isOver1000)

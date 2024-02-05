@@ -12,12 +12,20 @@ public class Clicker : MonoBehaviour
 
     double max = 1000000000;
     double min = 1000000;
+
+    double minAtStart;
+
     string amountTextString;
     int currentEndText;
 
     bool isOver1000;
 
     int allMultipliers = 1;
+
+    void Start()
+    {
+        minAtStart = min;
+    }
 
     void Update()
     {
@@ -33,12 +41,16 @@ public class Clicker : MonoBehaviour
     {
         if (amount < min && currentEndText > 1)
         {
+            if (amount < minAtStart)
+            {
+                currentEndText = 1;
+                return;
+            }
+
             min /= 1000;
             max /= 1000;
 
             currentEndText--;
-
-            Debug.Log("Minus");
         }
         else if (amount >= max)
         {
@@ -46,8 +58,6 @@ public class Clicker : MonoBehaviour
             max *= 1000;
 
             currentEndText++;
-
-            Debug.Log("Plus");
         }
         else if (amount >= 1000 && !isOver1000)
         {

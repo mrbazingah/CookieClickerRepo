@@ -16,6 +16,8 @@ public class BuyFarms : MonoBehaviour
 
     double max = 1000000000;
     double min = 1000000;
+    double minAtStart;
+
     string[] endTexts;
     int currentEndText;
     string costTextString;
@@ -30,6 +32,8 @@ public class BuyFarms : MonoBehaviour
 
         costText.text = cost.ToString();
         endTexts = clicker.GetEndTexts();
+
+        minAtStart = min;
     }
 
     void Update()
@@ -44,12 +48,16 @@ public class BuyFarms : MonoBehaviour
     {
         if (cost < min && currentEndText > 1)
         {
+            if (cost < minAtStart)
+            {
+                currentEndText = 1;
+                return;
+            }
+
             min /= 1000;
             max /= 1000;
 
             currentEndText--;
-
-            Debug.Log("Minus");
         }
         else if (cost >= max)
         {
@@ -57,8 +65,6 @@ public class BuyFarms : MonoBehaviour
             max *= 1000;
 
             currentEndText++;
-
-            Debug.Log("Plus");
         }
         else if (cost >= 1000 && !isOver1000)
         {
